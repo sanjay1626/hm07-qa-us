@@ -23,11 +23,36 @@ test('check response status code for deleting a kit', async () => {
     expect(actualStatus).toBe(200);
 });
 
+// Test to check that the response body contains the expected data for deleting a kit
 test('check that the response body contains the expected data for deleting a kit', async () => {
     let responseData;
+
     try {
-        // Make DELETE request
-        const response = await fetch(`${config.API_URL}/api/v1/kits/7`, {
+        // First, create a new kit
+        const createResponse = await fetch(`${config.API_URL}/api/v1/kits`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: 'Test Kit', // Required parameter
+                cardId: 1 // Optional parameter, adjust as needed
+            })
+        });
+
+        const createText = await createResponse.text();
+        console.log("Create Response Status:", createResponse.status);
+        console.log("Create Response Text:", createText);
+
+        if (!createResponse.ok) {
+            throw new Error(`Request failed with status ${createResponse.status}: ${createText}`);
+        }
+
+        const createData = JSON.parse(createText);
+        createdKitId = createData.id; // Assuming the response contains the ID of the created kit
+
+        // Now, make DELETE request
+        const response = await fetch(`${config.API_URL}/api/v1/kits/${createdKitId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
