@@ -14,11 +14,6 @@ beforeAll(async () => {
         'Content-Type': 'application/json'
     };
 
-/*// Optionally include the authorization token if necessary
-    const authToken = 'yourAuthToken'; // Replace 'yourAuthToken' with your actual token
-    if (authToken) {
-        headers['Authorization'] = `Bearer ${authToken}`;
-    }*/
 
     const response = await fetch(`${config.API_URL}/api/v1/kits`, {
         method: 'POST',
